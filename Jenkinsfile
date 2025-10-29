@@ -1,5 +1,5 @@
 pipeline {
-    agent { label "${environment}" }
+    agent { label "jenkins agent" }
     parameters {
         choice choices: ['dev', 'qa', 'uat', 'prod'], description: 'Choose the env', name: 'environment'
         booleanParam defaultValue: true, description: 'Enable to run sonar scan', name: 'sonar'
@@ -64,7 +64,7 @@ pipeline {
 
         stage('deploy') {
             steps {
-                sh 'cp -r /target/*.war /opt/tomcat/apache-tomcat-9.0.68/webapps/'
+                sh 'cp -r /home/ec2-user/workspace/target/*.war /home/ec2-user/apache-tomcat-9.0.111/webapps/'
             }
         }
     }
