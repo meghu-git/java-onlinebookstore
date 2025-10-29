@@ -6,8 +6,8 @@ pipeline {
     }
     environment {
         SONARQUBE_ENV = 'sonarscanner' 
-        PROJECT_KEY = 'onelinebookstore'
-        JFROG_URL = 'http://<jfrog>:8081/artifactory/onlinebookstore'
+        PROJECT_KEY = 'meghana-project'
+        JFROG_URL = 'http://52.70.159.123:8081/artifactory/onlinebookstore'
     }
     stages {
         stage('checkout') {
