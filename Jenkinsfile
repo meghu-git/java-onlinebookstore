@@ -23,8 +23,16 @@ pipeline {
             steps {
                 withSonarQubeEnv("${SONARQUBE_ENV}") {
                     sh "mvn clean verify sonar:sonar -Dsonar.projectKey=${PROJECT_KEY}"
+                    sh "sleep 10s"
                     //sh 'mvn sonar:sonar -Dsonar.projectKey=test -Dsonar.host.url=http://<sonar-ip>:9000/ -Dsonar.branch.name=main -Dsonar/login=squ_fe540d1f3e9f1799cbcde6b1acef600670e9eff1'
                 }
+            }
+            post {
+                always {
+                    jacoco execPattern: 'target/*.exec'
+                    junit 'target/surefire-reports/*.xml'
+                }
+                
             }
         }
 
@@ -34,21 +42,15 @@ pipeline {
             }
             steps {
                 timeout(time: 2, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: false
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
 
         stage('build') {
             steps {
-                sh 'mvn clean install'
+                sh 'mvn clean package -Dskiptest'
                 archiveArtifacts artifacts: 'target/*.war', fingerprint: true
-            }
-            post {
-                always {
-                    jacoco execPattern: 'target/*.exec'
-                    junit 'target/surefire-reports/*.xml'
-                }
             }
         }
 
